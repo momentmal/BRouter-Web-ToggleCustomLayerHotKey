@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "BRouter Layer Hotkeys",
+  "version": "1.0",
+  "description": "Toggle custom layers in BRouter-Web with keyboard shortcuts.",
+  "content_scripts": [{
+    "matches": [
+      "https://bikerouter.de/*",
+      "https://brouter.de/*",
+      "https://dev.bikerouter.de/*",
+      "https://next.bikerouter.de/*"
+    ],
+    "js": ["content.js"]
+  }],
+  "permissions": []
+}
