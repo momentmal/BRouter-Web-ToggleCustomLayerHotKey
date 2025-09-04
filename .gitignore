@@ -1,0 +1,6 @@
+# Ignore VS Code workspace files
+*.code-workspace
+
+# Ignore OS junk
+.DS_Store
+Thumbs.db
