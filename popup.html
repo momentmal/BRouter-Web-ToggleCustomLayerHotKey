@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BRouter Layer Hotkeys</title>
+  <style>
+    body { font-family: sans-serif; padding: 8px; }
+    h3 { margin-top: 12px; }
+    .row {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ccc;
+    }
+    .field {
+      margin: 4px 0;
+    }
+    label {
+      font-weight: bold;
+      margin-right: 6px;
+      display: inline-block;
+      min-width: 65px;
+    }
+    input[type="text"] { width: 140px; }
+    table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+    td, th { border: 1px solid #ccc; padding: 4px 6px; text-align: left; }
+    .btn-row { margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <h3>Current Hotkeys</h3>
+  <table id="current-table">
+    <thead>
+      <tr><th>Layer</th><th>Hotkey</th></tr>
+    </thead>
+    <tbody id="current-body">
+      <tr><td colspan="2"><em>No hotkeys set</em></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Edit Hotkeys</h3>
+  <div id="config-container"></div>
+
+  <div class="btn-row">
+    <button id="add-line">➕ Add Layer</button>
+    <button id="clear-lines">🗑 Clear All</button>
+  </div>
+  <hr>
+  <button id="save-config">💾 Save Changes</button>
+  <div id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
