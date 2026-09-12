@@ -19,21 +19,23 @@ function makeRow(data = {}) {
   row.className = "row";
 
   row.innerHTML = `
-    <div class="field">
+    <div class="field layer-field">
       <label>Layer:</label>
       <input type="text" class="layer-name" value="${escapeHtml(data.layer || "")}">
     </div>
-    <div class="field">
+    <div class="field modifiers-field">
       <label>Modifiers:</label>
-      <label><input type="checkbox" class="mod-ctrl" ${data.ctrl ? "checked" : ""}>Ctrl</label>
-      <label><input type="checkbox" class="mod-shift" ${data.shift ? "checked" : ""}>Shift</label>
-      <label><input type="checkbox" class="mod-alt" ${data.alt ? "checked" : ""}>Alt</label>
+      <div class="modifiers">
+        <label><input type="checkbox" class="mod-ctrl" ${data.ctrl ? "checked" : ""}>Ctrl</label>
+        <label><input type="checkbox" class="mod-shift" ${data.shift ? "checked" : ""}>Shift</label>
+        <label><input type="checkbox" class="mod-alt" ${data.alt ? "checked" : ""}>Alt</label>
+      </div>
     </div>
-    <div class="field">
+    <div class="field key-field">
       <label>Key:</label>
       <input type="text" maxlength="1" class="key" value="${escapeHtml(data.key || "")}">
     </div>
-    <div class="field">
+    <div class="field delete-field">
       <button type="button" class="delete-line">🗑 Delete Layer</button>
     </div>
   `;

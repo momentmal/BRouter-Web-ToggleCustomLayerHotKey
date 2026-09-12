@@ -4,23 +4,37 @@
   <meta charset="UTF-8">
   <title>BRouter Layer Hotkeys</title>
   <style>
-    body { font-family: sans-serif; padding: 8px; }
+    * { box-sizing: border-box; }
+    body { font-family: sans-serif; padding: 8px; width: 440px; }
     h3 { margin-top: 12px; }
     .row {
-      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 150px 1fr auto;
+      grid-template-areas:
+        "layer modifiers delete"
+        "key modifiers delete";
+      column-gap: 10px;
+      row-gap: 4px;
+      align-items: center;
+      margin-bottom: 8px;
       padding-bottom: 8px;
       border-bottom: 1px solid #ccc;
     }
-    .field {
-      margin: 4px 0;
-    }
-    label {
+    .field { margin: 0; }
+    .layer-field { grid-area: layer; }
+    .modifiers-field { grid-area: modifiers; }
+    .key-field { grid-area: key; }
+    .delete-field { grid-area: delete; align-self: center; }
+    .field > label {
       font-weight: bold;
       margin-right: 6px;
       display: inline-block;
-      min-width: 65px;
+      min-width: 48px;
     }
-    input[type="text"] { width: 140px; }
+    input[type="text"] { width: 92px; }
+    .layer-name { width: 96px; }
+    .modifiers { display: flex; flex-wrap: wrap; gap: 2px 8px; }
+    .modifiers label { min-width: 0; white-space: nowrap; }
     table { border-collapse: collapse; margin-top: 8px; width: 100%; }
     td, th { border: 1px solid #ccc; padding: 4px 6px; text-align: left; }
     .btn-row { margin-top: 6px; }
