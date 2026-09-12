@@ -9,10 +9,10 @@
     h3 { margin-top: 12px; }
     .row {
       display: grid;
-      grid-template-columns: 150px 1fr auto;
+      grid-template-columns: 1fr auto;
       grid-template-areas:
-        "layer modifiers delete"
-        "key modifiers delete";
+        "layer delete"
+        "modifiers key";
       column-gap: 10px;
       row-gap: 4px;
       align-items: center;
@@ -32,9 +32,10 @@
       min-width: 48px;
     }
     input[type="text"] { width: 92px; }
-    .layer-name { width: 96px; }
-    .modifiers { display: flex; flex-wrap: wrap; gap: 2px 8px; }
+    .layer-name { width: 240px; }
+    .modifiers { display: inline-flex; flex-wrap: wrap; gap: 2px 8px; }
     .modifiers label { min-width: 0; white-space: nowrap; }
+    .delete-line { color: #b00020; font-size: 20px; font-weight: bold; line-height: 1; padding: 2px 7px; }
     table { border-collapse: collapse; margin-top: 8px; width: 100%; }
     td, th { border: 1px solid #ccc; padding: 4px 6px; text-align: left; }
     .btn-row { margin-top: 6px; }

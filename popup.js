@@ -36,7 +36,7 @@ function makeRow(data = {}) {
       <input type="text" maxlength="1" class="key" value="${escapeHtml(data.key || "")}">
     </div>
     <div class="field delete-field">
-      <button type="button" class="delete-line">🗑 Delete Layer</button>
+      <button type="button" class="delete-line" aria-label="Delete layer" title="Delete layer">×</button>
     </div>
   `;
   row.querySelector(".delete-line").addEventListener("click", () => {
