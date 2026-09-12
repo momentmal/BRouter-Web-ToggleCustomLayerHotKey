@@ -7,6 +7,6 @@ Thumbs.db
 
 # Personal extension configuration and exported backups
 settings.json
-brouter-layer-hotkeys-backup*.json
+brouter-layer-hotkeys-*.json
 backup/*
 !backup/.gitkeep
