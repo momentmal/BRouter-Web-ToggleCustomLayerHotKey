@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <title>BRouter Layer Hotkeys</title>
   <style>
+    :root { color-scheme: light dark; --background: #fff; --foreground: #000; --surface: #fff; --border: #ccc; }
+    @media (prefers-color-scheme: dark) {
+      :root { --background: #202124; --foreground: #e8eaed; --surface: #303134; --border: #5f6368; }
+    }
     * { box-sizing: border-box; }
-    body { font-family: sans-serif; padding: 8px; width: 440px; }
+    body { font-family: sans-serif; padding: 8px; width: 440px; background: var(--background); color: var(--foreground); }
     h3 { margin-top: 12px; }
     .row {
       display: grid;
@@ -18,26 +22,27 @@
       align-items: center;
       margin-bottom: 8px;
       padding-bottom: 8px;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid var(--border);
     }
     .field { margin: 0; }
     .layer-field { grid-area: layer; }
     .modifiers-field { grid-area: modifiers; }
     .key-field { grid-area: key; }
-    .delete-field { grid-area: delete; align-self: center; }
+    .delete-field { grid-area: delete; align-self: center; justify-self: end; }
     .field > label {
       font-weight: bold;
       margin-right: 6px;
       display: inline-block;
       min-width: 48px;
     }
-    input[type="text"] { width: 92px; }
-    .layer-name { width: 240px; }
+    input[type="text"] { width: 92px; background: var(--surface); color: var(--foreground); border: 1px solid var(--border); }
+    input.layer-name { width: 240px; }
     .modifiers { display: inline-flex; flex-wrap: wrap; gap: 2px 8px; }
     .modifiers label { min-width: 0; white-space: nowrap; }
-    .delete-line { color: #b00020; font-size: 20px; font-weight: bold; line-height: 1; padding: 2px 7px; }
+    button { background: var(--surface); color: var(--foreground); border: 1px solid var(--border); }
+    .delete-line { color: #c62828; font-size: 20px; font-weight: bold; line-height: 1; padding: 2px 7px; }
     table { border-collapse: collapse; margin-top: 8px; width: 100%; }
-    td, th { border: 1px solid #ccc; padding: 4px 6px; text-align: left; }
+    td, th { border: 1px solid var(--border); padding: 4px 6px; text-align: left; }
     .btn-row { margin-top: 6px; }
   </style>
 </head>
