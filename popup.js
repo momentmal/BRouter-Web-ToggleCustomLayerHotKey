@@ -2,29 +2,47 @@ const container = document.getElementById("config-container");
 const addBtn = document.getElementById("add-line");
 const clearBtn = document.getElementById("clear-lines");
 const saveBtn = document.getElementById("save-config");
+const exportBtn = document.getElementById("export-config");
+const importBtn = document.getElementById("import-config");
+const importFile = document.getElementById("import-file");
 const statusDiv = document.getElementById("status");
 const currentBody = document.getElementById("current-body");
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, character => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+  })[character]);
+}
 
 function makeRow(data = {}) {
   const row = document.createElement("div");
   row.className = "row";
 
   row.innerHTML = `
-    <div class="field">
+    <div class="field layer-field">
       <label>Layer:</label>
-      <input type="text" class="layer-name" value="${data.layer || ""}">
+      <input type="text" class="layer-name" value="${escapeHtml(data.layer || "")}">
     </div>
-    <div class="field">
+    <div class="field modifiers-field">
       <label>Modifiers:</label>
-      <label><input type="checkbox" class="mod-ctrl" ${data.ctrl ? "checked" : ""}>Ctrl</label>
-      <label><input type="checkbox" class="mod-shift" ${data.shift ? "checked" : ""}>Shift</label>
-      <label><input type="checkbox" class="mod-alt" ${data.alt ? "checked" : ""}>Alt</label>
+      <div class="modifiers">
+        <label><input type="checkbox" class="mod-ctrl" ${data.ctrl ? "checked" : ""}>Ctrl</label>
+        <label><input type="checkbox" class="mod-shift" ${data.shift ? "checked" : ""}>Shift</label>
+        <label><input type="checkbox" class="mod-alt" ${data.alt ? "checked" : ""}>Alt</label>
+      </div>
     </div>
-    <div class="field">
+    <div class="field key-field">
       <label>Key:</label>
-      <input type="text" maxlength="1" class="key" value="${data.key || ""}">
+      <input type="text" maxlength="1" class="key" value="${escapeHtml(data.key || "")}">
+    </div>
+    <div class="field delete-field">
+      <button type="button" class="delete-line" aria-label="Delete layer" title="Delete layer">×</button>
     </div>
   `;
+  row.querySelector(".delete-line").addEventListener("click", () => {
+    row.remove();
+    if (!container.querySelector(".row")) makeRow();
+  });
   container.appendChild(row);
 }
 
@@ -60,8 +78,25 @@ function renderCurrent(config) {
       hk.alt ? "Alt" : ""
     ].filter(Boolean).join("+");
     const combo = (mods ? mods + "+" : "") + hk.key;
-    currentBody.innerHTML += `<tr><td>${hk.layer}</td><td>${combo}</td></tr>`;
+    const tableRow = document.createElement("tr");
+    const layerCell = document.createElement("td");
+    const hotkeyCell = document.createElement("td");
+    layerCell.textContent = hk.layer;
+    hotkeyCell.textContent = combo;
+    tableRow.append(layerCell, hotkeyCell);
+    currentBody.appendChild(tableRow);
   });
+}
+
+function showStatus(message, duration = 2000) {
+  statusDiv.textContent = message;
+  setTimeout(() => statusDiv.textContent = "", duration);
+}
+
+function loadIntoEditor(config) {
+  container.innerHTML = "";
+  if (config.length) config.forEach(makeRow);
+  else makeRow();
 }
 
 // Save config
@@ -79,16 +114,68 @@ addBtn.addEventListener("click", () => makeRow());
 
 // Clear lines
 clearBtn.addEventListener("click", () => {
-  container.innerHTML = "";
-  makeRow();
+  chrome.storage.sync.set({ hotkeys: [] }, () => {
+    loadIntoEditor([]);
+    renderCurrent([]);
+    showStatus("✅ All hotkeys cleared");
+  });
+});
+
+exportBtn.addEventListener("click", () => {
+  chrome.storage.sync.get({ hotkeys: [] }, ({ hotkeys }) => {
+    const backup = {
+      format: "brouter-layer-hotkeys",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      hotkeys
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    const now = new Date();
+    const pad = value => String(value).padStart(2, "0");
+    const timestamp = [
+      now.getFullYear(), pad(now.getMonth() + 1), pad(now.getDate()),
+      pad(now.getHours()), pad(now.getMinutes())
+    ].join("-");
+    link.download = `brouter-layer-hotkeys-${timestamp}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showStatus("✅ Backup exported");
+  });
+});
+
+importBtn.addEventListener("click", () => importFile.click());
+
+importFile.addEventListener("change", async () => {
+  const file = importFile.files[0];
+  importFile.value = "";
+  if (!file) return;
+
+  try {
+    const backup = JSON.parse(await file.text());
+    if (backup.format !== "brouter-layer-hotkeys" || backup.version !== 1 || !Array.isArray(backup.hotkeys)) {
+      throw new Error("not a BRouter Layer Hotkeys backup");
+    }
+    const hotkeys = backup.hotkeys.filter(item =>
+      item && typeof item.layer === "string" && item.layer.trim() &&
+      typeof item.key === "string" && item.key.trim().length === 1
+    ).map(item => ({
+      layer: item.layer.trim(), key: item.key.trim().toUpperCase(),
+      ctrl: !!item.ctrl, shift: !!item.shift, alt: !!item.alt
+    }));
+    chrome.storage.sync.set({ hotkeys }, () => {
+      loadIntoEditor(hotkeys);
+      renderCurrent(hotkeys);
+      showStatus(`✅ Imported ${hotkeys.length} layer${hotkeys.length === 1 ? "" : "s"}`);
+    });
+  } catch (error) {
+    showStatus(`❌ Import failed: ${error.message}`, 4000);
+  }
 });
 
 // Restore saved config
 chrome.storage.sync.get({ hotkeys: [] }, (result) => {
   renderCurrent(result.hotkeys);
-  if (result.hotkeys.length) {
-    result.hotkeys.forEach(cfg => makeRow(cfg));
-  } else {
-    makeRow(); // one empty line by default
-  }
+  loadIntoEditor(result.hotkeys);
 });
