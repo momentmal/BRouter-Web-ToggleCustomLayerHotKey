@@ -112,8 +112,11 @@ addBtn.addEventListener("click", () => makeRow());
 
 // Clear lines
 clearBtn.addEventListener("click", () => {
-  container.innerHTML = "";
-  makeRow();
+  chrome.storage.sync.set({ hotkeys: [] }, () => {
+    loadIntoEditor([]);
+    renderCurrent([]);
+    showStatus("✅ All hotkeys cleared");
+  });
 });
 
 exportBtn.addEventListener("click", () => {
@@ -127,7 +130,8 @@ exportBtn.addEventListener("click", () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "brouter-layer-hotkeys-backup.json";
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    link.download = `brouter-layer-hotkeys-backup-${timestamp}.json`;
     link.click();
     URL.revokeObjectURL(url);
     showStatus("✅ Backup exported");

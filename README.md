@@ -4,7 +4,7 @@ Chrome Extension for BRouter-Web (created through AI assisted coding) that allow
 
 ## Configuration and backups
 
-Layer names and shortcuts are stored in Chrome's synced extension storage, rather than in a file in this repository. Use **Export Backup** in the extension popup to download the current configuration as JSON, and **Import Backup** to restore it on this or another browser profile. You can keep downloaded backups in `backup/`; that folder is intentionally ignored by Git so personal layer names and shortcuts are never committed.
+Layer names and shortcuts are stored in Chrome's synced extension storage, rather than in a file in this repository. Use **Export Backup** in the extension popup to download the current configuration as a timestamped JSON file, and **Import Backup** to restore it on this or another browser profile. You can keep downloaded backups in `backup/`; that folder and backup filenames are intentionally ignored by Git so personal layer names and shortcuts are never committed.
 
 ## Changelog
 
