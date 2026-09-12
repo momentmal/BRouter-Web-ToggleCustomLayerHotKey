@@ -12,5 +12,5 @@ See [releases](https://github.com/momentmal/BRouter-Web-ToggleCustomLayerHotKey/
 
 ## Screenshot
 
-<img width="175" height="573" alt="image" src="https://github.com/user-attachments/assets/1ff6361f-95b9-43bb-bb2a-d796d8b2cd7e" />
+![BRouter Layer Hotkeys popup in dark mode](images/popup-dark.png)
 
